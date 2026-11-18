@@ -3,7 +3,8 @@ import os
 import shutil
 from model import Task, TaskManager
 
-FILENAME = "task_data.json"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+FILENAME = os.path.join(BASE_DIR, "task_data.json")
 
 def load_data():
     manager= TaskManager()
@@ -26,7 +27,7 @@ def load_data():
                 )
 
                 manager.add_task(task)
-    except json.JSONDecodeError:
+    except (json.JSONDecodeError, KeyError, TypeError):
         print("\n Error: The data file is damaged or currupted.")
 
         backup_name = FILENAME + ".backup"
@@ -44,6 +45,8 @@ def save_data(manager):
         with open(FILENAME, 'w') as file:
             json.dump(data_to_save, file, indent= 4)
 
+        return True
+
     except Exception as e:
-        print("Error saving data: {e} ")
-        
+        print(f"Error saving data: {e} ")
+        return False

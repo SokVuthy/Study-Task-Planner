@@ -38,7 +38,7 @@ class TaskManager:
 
         total= len(self.task)
 
-        completed = sum(1 for t in self.task.values() if t.status.lower=="completed")
+        completed = sum(1 for t in self.task.values() if t.status.lower()=="completed")
 
         pending = total - completed
 
