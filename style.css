@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
+/* =================1. BASE===================== */
+
 html, body, .stApp {
     font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
 }
@@ -15,6 +17,9 @@ header[data-testid="stHeader"] {
 footer {
     visibility: hidden;
 }
+
+
+/* ================== 2. SIDEBAR ===================== */
 
 [data-testid="stSidebar"] {
     background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 60%, #2563eb 100%);
@@ -53,6 +58,7 @@ footer {
     text-transform: uppercase;
 }
 
+/* ----- sidebar navigation (radio) ----- */
 [data-testid="stSidebar"] [role="radiogroup"] {
     gap: 6px;
 }
@@ -104,6 +110,7 @@ footer {
     background-color: #1e3a8a;
 }
 
+/* ----- sidebar open / close arrows ----- */
 [data-testid="stSidebarCollapseButton"] button,
 [data-testid="stSidebar"] button[kind="header"] {
     background: rgba(255, 255, 255, 0.14);
@@ -140,6 +147,7 @@ footer {
     fill: #ffffff !important;
 }
 
+/* ----- sidebar stat boxes ----- */
 .sidebar-stat {
     background: rgba(255, 255, 255, 0.14);
     border: 1px solid rgba(255, 255, 255, 0.12);
@@ -163,6 +171,8 @@ footer {
     color: #ffffff !important;
 }
 
+
+/* ======================= 3. TEXT ============================== */
 h1 {
     color: #1e3a8a !important;
     font-weight: 800;
@@ -186,18 +196,64 @@ h2, h3 {
     color: #334155;
 }
 
+.stApp [data-testid="stMain"] [data-testid="stCaptionContainer"],
+.stApp [data-testid="stMain"] [data-testid="stCaptionContainer"] * {
+    color: #475569 !important;
+    font-weight: 500;
+    opacity: 1;
+}
+
+
+/* ================4. INPUTS, DROPDOWNS AND FORMS ========================= */
+[data-testid="stTextInput"] [data-baseweb="input"],
+[data-testid="stDateInput"] [data-baseweb="input"],
+[data-testid="stSelectbox"] [data-baseweb="select"] > div {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+}
+
+[data-testid="stTextInput"] [data-baseweb="base-input"],
+[data-testid="stDateInput"] [data-baseweb="base-input"] {
+    background: #ffffff;
+}
+
 [data-testid="stTextInput"] input,
 [data-testid="stDateInput"] input {
-    border-radius: 8px;
-    border: 1px solid #cbd5e1;
-    background: #ffffff;
+    background: transparent;
     color: #1e293b;
 }
 
-[data-testid="stTextInput"] input:focus,
-[data-testid="stDateInput"] input:focus {
+[data-testid="stTextInput"] input::placeholder {
+    color: #94a3b8 !important;
+    opacity: 1 !important;
+}
+
+[data-testid="stTextInput"] [data-baseweb="input"]:focus-within,
+[data-testid="stDateInput"] [data-baseweb="input"]:focus-within {
     border-color: #3b82f6;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+[data-testid="stSelectbox"] [data-baseweb="select"] * {
+    color: #1e293b !important;
+}
+
+[data-testid="stSelectbox"] [data-baseweb="select"] svg {
+    fill: #1e3a8a;
+}
+
+[data-baseweb="popover"] ul {
+    background: #ffffff;
+}
+
+[data-baseweb="popover"] li,
+[data-baseweb="popover"] li * {
+    color: #1e293b !important;
+}
+
+[data-baseweb="popover"] li:hover {
+    background: #e0e7ff;
 }
 
 [data-testid="stForm"] {
@@ -206,9 +262,13 @@ h2, h3 {
     border-radius: 14px;
     padding: 28px;
     box-shadow: 0 6px 24px rgba(30, 58, 138, 0.08);
-    animation: fadeUp 0.6s ease both;
+    animation: fadeUp 0.6s ease backwards;
 }
 
+
+/* =============== 5. BUTTONS ====================== */
+
+/* ----- default blue button ----- */
 .stButton > button,
 [data-testid="stFormSubmitButton"] > button {
     background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
@@ -233,19 +293,78 @@ h2, h3 {
     color: #ffffff !important;
 }
 
-[class*="st-key-del_"] button {
+/* ----- red buttons (trash icon and confirm delete) ----- */
+[class*="st-key-trash_"] button,
+[class*="st-key-confirm_"] button {
     background: linear-gradient(135deg, #f87171 0%, #dc2626 100%);
-    padding: 10px 0;
 }
 
-[class*="st-key-del_"] button:hover {
+[class*="st-key-trash_"] button:hover,
+[class*="st-key-confirm_"] button:hover {
     box-shadow: 0 6px 16px rgba(220, 38, 38, 0.4);
+}
+
+/* ----- grey cancel button ----- */
+[class*="st-key-cancel_"] button {
+    background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
+}
+
+[class*="st-key-cancel_"] button:hover {
+    box-shadow: 0 6px 16px rgba(100, 116, 139, 0.4);
+}
+
+/* ----- confirm and cancel: same size, fill their column ----- */
+[class*="st-key-confirm_"],
+[class*="st-key-cancel_"],
+[class*="st-key-confirm_"] [data-testid="stButton"],
+[class*="st-key-cancel_"] [data-testid="stButton"] {
+    width: 100% !important;
+}
+
+[class*="st-key-confirm_"] button,
+[class*="st-key-cancel_"] button {
+    width: 100% !important;
+    min-width: 0;
+    padding: 10px 8px;
+    white-space: nowrap;
+}
+
+/* ----- trash button: small, with a drawn white icon ----- */
+[class*="st-key-trash_"] button {
+    width: 46px !important;
+    min-width: 46px;
+    height: 40px;
+    min-height: 40px;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+[class*="st-key-trash_"] button > * {
+    display: none !important;
+}
+
+[class*="st-key-trash_"] button::before {
+    content: "";
+    display: block;
+    width: 20px;
+    height: 20px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='3 6 5 6 21 6'/%3E%3Cpath d='M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6'/%3E%3Cpath d='M10 11v6M14 11v6'/%3E%3Cpath d='M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2'/%3E%3C/svg%3E") center / contain no-repeat;
+    transition: transform 0.25s ease;
+}
+
+[class*="st-key-trash_"] button:hover::before {
+    transform: rotate(-12deg) scale(1.15);
 }
 
 .spacer {
     height: 22px;
 }
 
+
+/* ================= 6. TASK CARDS ========================== */
 .task-card {
     background-color: #ffffff;
     padding: 16px 24px;
@@ -258,27 +377,17 @@ h2, h3 {
     align-items: center;
     gap: 16px;
     border-left: 6px solid #3b82f6;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: pan-y;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
-    animation: fadeUp 0.5s ease both;
+    animation: fadeUp 0.5s ease backwards;
 }
 
 .task-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 22px rgba(30, 58, 138, 0.15);
-}
-
-.task-card.completed {
-    border-left-color: #10b981;
-    opacity: 0.65;
-}
-
-.task-card.completed .task-title {
-    text-decoration: line-through;
-}
-
-.task-card.overdue {
-    border-left-color: #ef4444;
-    background: #fff7f7;
 }
 
 .task-title {
@@ -312,15 +421,39 @@ h2, h3 {
     font-weight: 500;
 }
 
-.task-card.overdue .task-due,
-.task-card.overdue .task-rel {
-    color: #ef4444;
+/* ----- card states ----- */
+.task-card.completed {
+    border-left-color: #10b981;
+    opacity: 0.65;
+}
+
+.task-card.completed .task-title {
+    text-decoration: line-through;
 }
 
 .task-card.completed .task-due {
     color: #10b981;
 }
 
+.task-card.overdue {
+    border-left-color: #ef4444;
+    background: #fff7f7;
+}
+
+.task-card.overdue .task-due,
+.task-card.overdue .task-rel {
+    color: #ef4444;
+}
+
+.task-card.confirming {
+    border-left-color: #ef4444;
+    background: #fff1f1;
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.35), 0 8px 22px rgba(239, 68, 68, 0.18);
+    opacity: 1;
+    cursor: default;
+}
+
+/* ----- badges ----- */
 .badge {
     display: inline-block;
     padding: 3px 10px;
@@ -346,6 +479,42 @@ h2, h3 {
     color: #b91c1c;
 }
 
+/* ----- swipe to delete ----- */
+.task-card.dragging {
+    cursor: grabbing;
+    box-shadow: 0 10px 28px rgba(220, 38, 38, 0.25);
+}
+
+.swipe-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-right: 28px;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #fca5a5 0%, #ef4444 100%);
+    pointer-events: none;
+    opacity: 0.35;
+    transition: opacity 0.2s ease, background 0.25s ease;
+}
+
+.swipe-bg.armed {
+    background: linear-gradient(90deg, #f87171 0%, #b91c1c 100%);
+}
+
+.swipe-bg .swipe-text {
+    color: #ffffff !important;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+
+/* ===================== 7. SUMMARY CARDS  ========================== */
 .summary-container {
     display: flex;
     justify-content: space-between;
@@ -363,7 +532,7 @@ h2, h3 {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    animation: fadeUp 0.6s ease both;
+    animation: fadeUp 0.6s ease backwards;
 }
 
 .summary-card:hover {
@@ -386,37 +555,17 @@ h2, h3 {
     font-size: 0.85rem;
 }
 
-.card-blue {
-    border-top: 5px solid #3b82f6;
-}
+.card-blue   { border-top: 5px solid #3b82f6; }
+.card-green  { border-top: 5px solid #10b981; }
+.card-orange { border-top: 5px solid #f59e0b; }
+.card-red    { border-top: 5px solid #ef4444; }
 
-.card-blue .summary-value {
-    color: #1e3a8a;
-}
+.card-blue .summary-value   { color: #1e3a8a; }
+.card-green .summary-value  { color: #10b981; }
+.card-orange .summary-value { color: #f59e0b; }
+.card-red .summary-value    { color: #ef4444; }
 
-.card-green {
-    border-top: 5px solid #10b981;
-}
-
-.card-green .summary-value {
-    color: #10b981;
-}
-
-.card-orange {
-    border-top: 5px solid #f59e0b;
-}
-
-.card-orange .summary-value {
-    color: #f59e0b;
-}
-
-.card-red {
-    border-top: 5px solid #ef4444;
-}
-
-.card-red .summary-value {
-    color: #ef4444;
-}
+/*================= 8. PROGRESS BAR AND UP NEXT LIST ========================== */
 
 .progress-track {
     width: 100%;
@@ -451,7 +600,7 @@ h2, h3 {
     border-left: 5px solid #f59e0b;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
-    animation: fadeUp 0.5s ease both;
+    animation: fadeUp 0.5s ease backwards;
 }
 
 .upcoming-item:hover {
@@ -478,6 +627,8 @@ h2, h3 {
     color: #ef4444;
 }
 
+
+/* ====================== 9. ANIMATIONS ======================== */
 @keyframes fadeUp {
     from {
         opacity: 0;
@@ -509,7 +660,9 @@ h2, h3 {
     }
 }
 
-@media (max-width: 768px) {
+
+/* ================================= 10. MOBILE ============================= */
+
     .task-card {
         flex-direction: column;
         align-items: flex-start;

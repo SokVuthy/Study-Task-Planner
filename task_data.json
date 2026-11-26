@@ -1,16 +1,30 @@
 [
     {
-        "task_id": "T003",
-        "title": "Testing",
-        "subject": "Computer science B",
-        "due_date": "2026-11-11",
-        "status": "completed"
+        "task_id": "T001",
+        "title": "Debugging",
+        "subject": "Computer Science B",
+        "due_date": "2026-11-28",
+        "status": "pending"
+    },
+    {
+        "task_id": "T002",
+        "title": "Making report",
+        "subject": "Data Structure and Algorithm",
+        "due_date": "2026-11-27",
+        "status": "pending"
     },
     {
         "task_id": "T004",
-        "title": "Computational Problem",
-        "subject": "Data Structure and Algorithm",
-        "due_date": "2026-11-23",
+        "title": "Print Hello world",
+        "subject": "Python",
+        "due_date": "2026-11-27",
+        "status": "pending"
+    },
+    {
+        "task_id": "T005",
+        "title": "Final Report",
+        "subject": "Machine Learning",
+        "due_date": "2026-11-30",
         "status": "pending"
     }
 ]

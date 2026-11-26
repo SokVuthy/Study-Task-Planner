@@ -1,7 +1,11 @@
 import storage
-from model import Task
+from model import STATUS_COMPLETED, STATUS_PENDING, parse_date
 
-def print_menu(): 
+
+
+# =============MENU===========
+
+def print_menu():
     print("\n--- STUDY TASK PLANNER ---")
     print("1. Add Task")
     print("2. View All Tasks")
@@ -9,10 +13,12 @@ def print_menu():
     print("4. Update Task Status")
     print("5. Delete Task")
     print("6. Show Summary")
-    print("7. Exit")    
+    print("7. Exit")
+
+
+# ======================INPUT / OUTPUT HELPERS================
 
 def get_valid_input(prompt):
-
     while True:
         user_input = input(prompt).strip()
         if not user_input:
@@ -20,147 +26,168 @@ def get_valid_input(prompt):
             continue
         return user_input
 
+def get_valid_date(prompt):
+    while True:
+        date = parse_date(get_valid_input(prompt))
+        if date:
+            return date
+        print("Error: Date must be in YYYY-MM-DD format (e.g. 2026-11-30)!!")
+
+
+def print_task(task):
+    print(
+        f"[{task.task_id}] {task.title} | Subject: {task.subject} "
+        f"| Due: {task.due_date} | Status: {task.status}"
+    )
+
+
+def print_tasks(tasks, empty_message):
+    if not tasks:
+        print(empty_message)
+        return
+
+    for task in tasks:
+        print_task(task)
+
+
+# ==============1. ADD TASK=================
+
+def menu_add_task(manager):
+    print("\n ADD TASK")
+    title = get_valid_input("Enter Task Title: ")
+    subject = get_valid_input("Enter Subject: ")
+    due_date = get_valid_date("Enter Due Date (YYYY-MM-DD): ")
+
+    task = manager.create_task(title, subject, due_date)
+
+    if storage.save_data(manager):
+        print(f"Success! Task {task.task_id} added and saved.")
+    else:
+        print(f"Task {task.task_id} was added but could not be saved.")
+
+
+# =========================2. VIEW ALL TASKS=============
+
+def menu_view_tasks(manager):
+    print("\n Task List ")
+    print_tasks(manager.get_sorted_tasks(), "Empty List")
+
+
+
+# ==================3. SEARCH / FILTER==================
+
+def menu_search(manager):
+    print("\n-- Search / Filter --")
+    print("1. Search by Subject")
+    print("2. Filter by Status")
+
+    sub_choice = input("Choice: ").strip()
+
+    if sub_choice == "1":
+        subject = input("Enter the subject to search: ").strip()
+        print_tasks(manager.search_by_subject(subject), f"No task found for {subject}")
+
+    elif sub_choice == "2":
+        status = input("Enter the status to filter (completed/pending): ").strip().lower()
+
+        if status not in (STATUS_PENDING, STATUS_COMPLETED):
+            print("Error: Status must be 'completed' or 'pending'!!")
+            return
+
+        print_tasks(manager.filter_tasks(status=status), f"No task with status: {status}")
+
+    else:
+        print("Error: Incorrect Input (Input Must be 1 or 2)!!")
+
+
+# ===============4. UPDATE TASK STATUS===============
+
+def menu_update_status(manager):
+    print("\n Update Task ")
+    task_id = input("Enter task ID to update: ").strip().upper()
+    task = manager.get_task(task_id)
+
+    if not task:
+        print("Error: Task ID not found!!!")
+        return
+
+    print(f"Current Status: {task.status}")
+    new_status = input("Enter new status (completed/pending): ").strip().lower()
+
+    if new_status not in (STATUS_PENDING, STATUS_COMPLETED):
+        print("Incorrect Input, please try again. (input must be 'completed' or 'pending') !!")
+        return
+
+    task.status = new_status
+    storage.save_data(manager)
+    print("Task status changed successfully.")
+
+
+# ====================5. DELETE TASK===============
+
+def menu_delete_task(manager):
+    print("\n Delete Task by ID ")
+    task_id = input("Enter task ID to delete: ").strip().upper()
+    task = manager.get_task(task_id)
+
+    if not task:
+        print("Task not found!!")
+        return
+
+    confirm = input(f"Are you sure you want to delete {task.title}? (y/n): ").strip().lower()
+
+    if confirm == "y":
+        manager.delete_task(task_id)
+        storage.save_data(manager)
+        print(f"Task {task.title} has been deleted. Remaining task IDs were renumbered.")
+    elif confirm == "n":
+        print("Deletion Cancelled.")
+    else:
+        print("Error: wrong input please try again. (input must be y=Y & n=N)")
+
+
+# ===================6. SHOW SUMMARY=================
+
+def menu_summary(manager):
+    summary = manager.get_summary()
+
+    print("\n Show Summary")
+    print(f"Total Tasks: {summary['total']}")
+    print(f"Completed/Done: {summary['completed']}")
+    print(f"Pending: {summary['pending']}")
+    print(f"Overdue: {summary['overdue']}")
+
+
+# =========================MAIN LOOP================
+
 def main():
-
     manager = storage.load_data()
-
-    next_id = 1
-
-    if manager.task:
-
-        existing_id = [int(tid.replace("T", "")) for tid in manager.task.keys()]
-        next_id = max(existing_id) + 1
 
     while True:
         print_menu()
         choice = input("Choose an option (1-7): ").strip()
 
         if choice == "1":
-
-            print("\n ADD TASK")
-            title = get_valid_input("Enter Task Title: ")
-            subject = get_valid_input("Enter Subject: ")
-            due_date = get_valid_input("Enter Due Date (YYYY-MM-DD): ")
-            
-            task_id = f"T{next_id:03d}"
-            next_id += 1
-            
-            new_task = Task(task_id, title, subject, due_date)
-            manager.add_task(new_task)
-            storage.save_data(manager)
-            
-            print(f"Success! Task {task_id} added and saved.")
-
+            menu_add_task(manager)
         elif choice == "2":
-
-            print("\n Task List ")
-
-            if not manager.task:
-                print("Empty List")
-
-            else: 
-                for t in manager.task.values(): # Singular
-                    print(f"[{t.task_id}] {t.title} | Subject: {t.subject} | Due: {t.due_date} | Status: {t.status}")
-        
+            menu_view_tasks(manager)
         elif choice == "3":
-
-            print("\n-- Search / Filter --")
-            print("1. Search by Subject")
-            print("2. Filter by Status")
-            
-            sub_choice = input("Choice: ").strip()
-
-            if sub_choice =="1":
-
-                sub_search = input("Enter the subject to search: ").strip().lower()
-                found = False
-
-                for t in manager.task.values():
-
-                    if t.subject.lower() == sub_search:
-
-                        print(f"[{t.task_id}] {t.title} | Due: {t.due_date} | Status: {t.status}")
-                        found = True
-
-                if not found: 
-                    print(f"No task found for {sub_search}")
-
-            elif sub_choice =="2":
- 
-                search_status = input("Enter the status to filter (completed/pending): ").strip().lower()
-                found = False
- 
-                for t in manager.task.values():
-                    
-                    if t.status.lower() == search_status:
-                        print(f"[{t.task_id}] {t.title} | Subject: {t.subject} | Due: {t.due_date}")
-                        found = True
-    
-                if not found:
-                         print(f"No task with status: {search_status}")
-
+            menu_search(manager)
         elif choice == "4":
-    
-            print("\n Update Task ")
-            task_id = input("Enter task ID to update: ").strip().upper()
-            task = manager.get_task(task_id)
-            
-            if task:
-                print(f"Current Status: {task.status}")
-                new_status = input("Enter new status (completed/pending): ").strip().lower()
-    
-                if new_status in ["pending", "completed"]:
-                    task.status = new_status
-                    storage.save_data(manager)
-                    print("Task status changed successfully.")
-    
-                else: 
-                    print("Incorrect Input, please try again. (input must be 'completed' or 'pending') !!")
-    
-            else: 
-                print("Error: Task ID not found!!!")
-
+            menu_update_status(manager)
         elif choice == "5":
-  
-            print("\n Delete Task by ID ")
-            task_id = input("Enter task ID to delete: ").strip().upper()
-            task = manager.get_task(task_id)
-            
-            if task: 
-        
-                confirm = input(f"Are you sure you want to delete {task.title}? (y/n): ").strip().lower()
-       
-                if confirm == "y":
-       
-                    manager.delete_task(task_id)
-                    storage.save_data(manager)
-                    print(f"Task {task.title} has been deleted.")
-       
-                elif confirm == "n":
-                    print("Deletion Cancelled.")
-
-                else: 
-                    print("Error: wrong input please try again. (input must be y=Y & n=N)")
-
-            else:
-                print("Task not found!!")
-
-        elif choice == "6": 
-
-            summary = manager.get_summary()
-
-            print("\n Show Summary")
-            print(f"Total Tasks: {summary['total']}")
-            print(f"Completed/Done: {summary['completed']}")
-            print(f"Pending: {summary['pending']}")
-            print(f"Overdue: {summary['overdue']}")
-
-        elif choice == "7": 
+            menu_delete_task(manager)
+        elif choice == "6":
+            menu_summary(manager)
+        elif choice == "7":
             print("Exiting program!!!")
             break
-
-        else: 
+        else:
             print("Invalid Input!! Input must be from 1-7")
 
+
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except (KeyboardInterrupt, EOFError):
+        print("\nExiting program!!!")
