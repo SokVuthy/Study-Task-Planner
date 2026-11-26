@@ -101,8 +101,8 @@ class TaskManager:
     # ================(search and filter)=============
     def search_by_subject(self, subject):
         subject = subject.strip().lower()
-        return [t for t in self.get_sorted_tasks() if t.subject.lower() == subject]
-
+        return [t for t in self.get_sorted_tasks() if subject in t.subject.lower()]
+    
     def filter_tasks(self, status=None, text=""):
         text = text.strip().lower()
         results = []

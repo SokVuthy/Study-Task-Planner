@@ -77,27 +77,29 @@ def menu_view_tasks(manager):
 # ==================3. SEARCH / FILTER==================
 
 def menu_search(manager):
-    print("\n-- Search / Filter --")
-    print("1. Search by Subject")
-    print("2. Filter by Status")
+    while True:
+        print("\n-- Search / Filter --")
+        print("1. Search by Subject")
+        print("2. Filter by Status")
+        print("3. Back to Main Menu")
 
-    sub_choice = input("Choice: ").strip()
+        sub_choice = input("Choice: ").strip()
 
-    if sub_choice == "1":
-        subject = input("Enter the subject to search: ").strip()
-        print_tasks(manager.search_by_subject(subject), f"No task found for {subject}")
-
-    elif sub_choice == "2":
-        status = input("Enter the status to filter (completed/pending): ").strip().lower()
-
-        if status not in (STATUS_PENDING, STATUS_COMPLETED):
-            print("Error: Status must be 'completed' or 'pending'!!")
-            return
-
-        print_tasks(manager.filter_tasks(status=status), f"No task with status: {status}")
-
-    else:
-        print("Error: Incorrect Input (Input Must be 1 or 2)!!")
+        if sub_choice == "1":
+            subject = input("Enter the subject to search: ").strip()
+            print_tasks(manager.search_by_subject(subject), f"No task found for {subject}")
+            
+        elif sub_choice == "2":
+            status = input("Enter the status to filter (completed/pending): ").strip().lower()
+            if status not in (STATUS_PENDING, STATUS_COMPLETED):
+                print("Error: Status must be 'completed' or 'pending'!!")
+            else:
+                print_tasks(manager.filter_tasks(status=status), f"No task with status: {status}")
+                
+        elif sub_choice == "3":
+            break 
+        else:
+            print("Error: Incorrect Input (Input Must be 1, 2, or 3)!!")
 
 
 # ===============4. UPDATE TASK STATUS===============
@@ -169,22 +171,27 @@ def main():
 
         if choice == "1":
             menu_add_task(manager)
+            input("\nPress Enter to return to the main menu...")
         elif choice == "2":
             menu_view_tasks(manager)
+            input("\nPress Enter to return to the main menu...")
         elif choice == "3":
-            menu_search(manager)
+            # Option 3 handles its own loop internally, so no pause needed here.
+            menu_search(manager) 
         elif choice == "4":
             menu_update_status(manager)
+            input("\nPress Enter to return to the main menu...")
         elif choice == "5":
             menu_delete_task(manager)
+            input("\nPress Enter to return to the main menu...")
         elif choice == "6":
             menu_summary(manager)
+            input("\nPress Enter to return to the main menu...")
         elif choice == "7":
             print("Exiting program!!!")
             break
         else:
             print("Invalid Input!! Input must be from 1-7")
-
 
 if __name__ == "__main__":
     try:

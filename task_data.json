@@ -14,16 +14,23 @@
         "status": "pending"
     },
     {
-        "task_id": "T004",
+        "task_id": "T003",
         "title": "Print Hello world",
         "subject": "Python",
         "due_date": "2026-11-27",
         "status": "pending"
     },
     {
-        "task_id": "T005",
+        "task_id": "T004",
         "title": "Final Report",
         "subject": "Machine Learning",
+        "due_date": "2026-11-30",
+        "status": "completed"
+    },
+    {
+        "task_id": "T005",
+        "title": "Presentation",
+        "subject": "Computer Science B",
         "due_date": "2026-11-30",
         "status": "pending"
     }
